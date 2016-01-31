@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Metal Sensor</string>
+    <string name="connecting_to_sensor">Подключение</string>
+    <string name="search_message">Поиск других устройств</string>
+    <string name="title_other_devices">Другие устройства</string>
+    <string name="title_paired_devices">Сопряженные устройства</string>
+    <string name="none_paired">Нет известных устройств</string>
+    <string name="empty_device_name">Новое устройство</string>
+    <string name="none_found">Не найдено</string>
+    <string name="select_device">Выбор устройства</string>
+    <string name="title_activity_work">Metal Sensor</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="welcome">Для корректной работы приложения необходимо включить Bluetooth. Нажмите на кнопку \"Подключение\" и выберите устройство.</string>
+    <string name="logo">logo</string>
+    <string name="temperature_text">Температура</string>
+    <string name="temperature_value" />
+    <string name="signal_text">Частицы износа</string>
+    <string name="signal_value" />
+    <string name="super_signal_text">Усиленный сигнал</string>
+    <string name="super_signal_value"> </string >
+    <string name="edit_text">По умолчанию = 96.0</string>
+    <string name="absolute_btn">Принять значение</string>
+    <string name="current_value_label">Текущее значение</string>
+    <string name="current_value" />
+    <string name="absolute_value_label">Абсолютная величина:</string>
+    <string name="msg_not_connected">Нет подключения</string>
+    <string name="msg_connecting">Подключение</string>
+    <string name="msg_connected">Подключено</string>
+</resources>

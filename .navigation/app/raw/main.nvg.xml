@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigationModel
+  ns = "http://schemas.android.com?import=com.android.tools.idea.editors.navigation.model.*">
+  <locations  
+    class = "java.util.ArrayList">
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "ru.ipmavlutov.metalsensor.DeviceListActivity"/>
+      <point      
+        x = "1188"      
+        y = "140"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "ru.ipmavlutov.metalsensor.Activities.Work"/>
+      <point      
+        x = "2264"      
+        y = "160"/>
+    </statePointEntry>
+    <statePointEntry>
+      <state      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        className = "ru.ipmavlutov.metalsensor.Activities.Welcome"/>
+      <point      
+        x = "116"      
+        y = "64"/>
+    </statePointEntry>
+  </locations>
+</navigationModel>
