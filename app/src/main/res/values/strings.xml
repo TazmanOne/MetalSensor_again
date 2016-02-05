@@ -21,7 +21,7 @@
     <string name="signal_text">Частицы износа</string>
     <string name="signal_value" />
     <string name="super_signal_text">Усиленный сигнал</string>
-    <string name="super_signal_value"> </string >
+    <string name="super_signal_value"> </string>
     <string name="edit_text">По умолчанию = 96.0</string>
     <string name="absolute_btn">Принять значение</string>
     <string name="current_value_label">Текущее значение</string>
@@ -30,4 +30,11 @@
     <string name="msg_not_connected">Нет подключения</string>
     <string name="msg_connecting">Подключение</string>
     <string name="msg_connected">Подключено</string>
+    <string name="get_first_date">С какого</string>
+    <string name="get_second_date">По какое</string>
+    <string name="label_first" />
+    <string name="label_second" />
+    <string name="date_picker">Выбор даты</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="graph_label_button">График</string>
 </resources>

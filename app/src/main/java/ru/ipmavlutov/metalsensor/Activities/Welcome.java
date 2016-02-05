@@ -22,6 +22,7 @@ public class Welcome extends AppCompatActivity {
     BluetoothResponseHandler mHandler;
     private DeviceConnector connector;
     Button btn_search;
+    Button btn_graph;
     BluetoothAdapter btAdapter;
     TextView tv;
 
@@ -31,6 +32,9 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         btn_search = (Button) findViewById(R.id.button);
         btn_search.setOnClickListener(start_search);
+        btn_graph=(Button)findViewById(R.id.button2);
+
+        btn_graph.setOnClickListener(start_graph);
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         tv = (TextView) findViewById(R.id.welcome);
@@ -69,7 +73,13 @@ public class Welcome extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
     }
-
+    View.OnClickListener start_graph=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i =new Intent(getBaseContext(),GraphActivity.class);
+            startActivity(i);
+        }
+    };
     View.OnClickListener start_search = new View.OnClickListener() {
 
 

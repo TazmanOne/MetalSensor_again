@@ -74,6 +74,8 @@ public class Work extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent graphs =new Intent(getBaseContext(),GraphActivity.class);
+                startActivity(graphs);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
