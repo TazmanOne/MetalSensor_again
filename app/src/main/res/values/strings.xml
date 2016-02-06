@@ -22,7 +22,7 @@
     <string name="signal_value" />
     <string name="super_signal_text">Усиленный сигнал</string>
     <string name="super_signal_value"> </string>
-    <string name="edit_text">По умолчанию = 96.0</string>
+    <string name="edit_text">По умолчанию=96.0</string>
     <string name="absolute_btn">Принять значение</string>
     <string name="current_value_label">Текущее значение</string>
     <string name="current_value" />

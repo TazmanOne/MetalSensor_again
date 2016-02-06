@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import ru.ipmavlutov.metalsensor.BluetoothResponseHandler;
 import ru.ipmavlutov.metalsensor.DeviceConnector;
 import ru.ipmavlutov.metalsensor.DeviceListActivity;
 import ru.ipmavlutov.metalsensor.R;
@@ -19,25 +18,21 @@ public class Welcome extends AppCompatActivity {
     public static final String EXTRA_DEVICE_ADDRESS = "device_address";
     public static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
-    BluetoothResponseHandler mHandler;
     private DeviceConnector connector;
-    Button btn_search;
-    Button btn_graph;
-    BluetoothAdapter btAdapter;
-    TextView tv;
+    private BluetoothAdapter btAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        btn_search = (Button) findViewById(R.id.button);
+        Button btn_search = (Button) findViewById(R.id.button);
         btn_search.setOnClickListener(start_search);
-        btn_graph=(Button)findViewById(R.id.button2);
+        Button btn_graph = (Button) findViewById(R.id.button2);
 
         btn_graph.setOnClickListener(start_graph);
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        tv = (TextView) findViewById(R.id.welcome);
+        TextView tv = (TextView) findViewById(R.id.welcome);
         Log.d(TAG, "onCreate");
     }
 
@@ -108,6 +103,8 @@ public class Welcome extends AppCompatActivity {
                     it.putExtra(EXTRA_DEVICE_ADDRESS, address);
                     startActivity(it);
                 }
+                break;
+            default:
                 break;
 
         }

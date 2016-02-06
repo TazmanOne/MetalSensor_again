@@ -1,11 +1,16 @@
 package ru.ipmavlutov.metalsensor.Activities;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -14,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +28,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.opencsv.CSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,6 +49,10 @@ public class Work extends AppCompatActivity
     public static final String EXTRA_DEVICE_ADDRESS = "device_address";
     public static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int PREFERENCE_MODE_PRIVATE = 0;
+
+
+
+    private static final String TAG = "WORK";
     public static double Z;
     public String MAC_ADDRESS;
 
@@ -74,7 +88,7 @@ public class Work extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent graphs =new Intent(getBaseContext(),GraphActivity.class);
+                Intent graphs = new Intent(getBaseContext(), GraphActivity.class);
                 startActivity(graphs);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -184,23 +198,31 @@ public class Work extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopConnection();
+        Log.d(TAG, "onDestroy");
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_connect) {
+            stopConnection();
+            Intent serverIntent = new Intent(getBaseContext(), DeviceListActivity.class);
+            startActivity(serverIntent);
+        } else if (id == R.id.nav_graph) {
+            Intent graph = new Intent(getBaseContext(), GraphActivity.class);
+            startActivity(graph);
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_export) {
+            new ExportDBtoCSV().execute();
 
         }
 
@@ -268,11 +290,71 @@ public class Work extends AppCompatActivity
 
     public void myTimer(boolean first_start) {
         if (first_start)
-            my_tm.schedule(my_tt, 3000, 6000);
+            my_tm.schedule(my_tt, 5000, (5 * 60 * 1000));
     }
 
     public void myTimer_off() {
         my_tt.cancel();
         my_tm.cancel();
+    }
+
+    public class ExportDBtoCSV extends AsyncTask<String, Void, Boolean> {
+        DBHelper dbhelper = new DBHelper(Work.this);
+        private final ProgressDialog dialog = new ProgressDialog(Work.this);
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage("Exporting database...");
+            this.dialog.show();
+        }
+
+        protected Boolean doInBackground(final String... args) {
+            //File dbFile = getDatabasePath("database_name");
+            //AABDatabaseManager dbhelper = new AABDatabaseManager(getApplicationContext());
+            //System.out.println(dbFile);  // displays the data base path in your logcat
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            }
+            File file = new File(exportDir, "exportDB.csv");
+            try {
+                if (file.createNewFile()) {
+                    System.out.println("File is created!");
+                    System.out.println("myDB.csv " + file.getAbsolutePath());
+                } else {
+                    System.out.println("File already exists.");
+                }
+                CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+                SQLiteDatabase db = dbhelper.getWritableDatabase();
+                Cursor curCSV = db.rawQuery("select * from Statistic", null);
+                csvWrite.writeNext(curCSV.getColumnNames());
+                while (curCSV.moveToNext()) {
+                    String arrStr[] = {curCSV.getString(0), curCSV.getString(1), curCSV.getString(2), curCSV.getString(3), curCSV.getString(4)};
+         /*curCSV.getString(3),curCSV.getString(4)};*/
+                    csvWrite.writeNext(arrStr);
+                }
+                csvWrite.close();
+                curCSV.close();
+        /*String data="";
+        data=readSavedData();
+        data= data.replace(",", ";");
+        writeData(data);*/
+                return true;
+            } catch (IOException e) {
+                Log.e("MainActivity", e.getMessage(), e);
+                return false;
+            }
+        }
+
+        protected void onPostExecute(final Boolean success) {
+            if (this.dialog.isShowing()) {
+                this.dialog.dismiss();
+            }
+            if (success) {
+                Toast.makeText(getApplicationContext(), "Export succeed", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Export failed", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -41,6 +41,7 @@ public class DeviceListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.device_list);
 
+
         // Set default result to CANCELED, in case the user backs out
         setResult(Activity.RESULT_CANCELED);
 
@@ -71,6 +72,7 @@ public class DeviceListActivity extends Activity {
         registerReceiver(mReceiver, filter);
 
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBtAdapter.isDiscovering()) mBtAdapter.cancelDiscovery();
 
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
@@ -108,8 +110,7 @@ public class DeviceListActivity extends Activity {
 
         setTitle(R.string.search_message);
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-        if (mBtAdapter.isDiscovering()) mBtAdapter.cancelDiscovery();
-        mBtAdapter.startDiscovery();
+
     }
 
     private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
