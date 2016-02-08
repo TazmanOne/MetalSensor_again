@@ -41,7 +41,6 @@ public class DeviceListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.device_list);
 
-
         // Set default result to CANCELED, in case the user backs out
         setResult(Activity.RESULT_CANCELED);
 
@@ -72,7 +71,6 @@ public class DeviceListActivity extends Activity {
         registerReceiver(mReceiver, filter);
 
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBtAdapter.isDiscovering()) mBtAdapter.cancelDiscovery();
 
         Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
@@ -94,9 +92,11 @@ public class DeviceListActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
+
         this.unregisterReceiver(mReceiver);
     }
 
@@ -110,7 +110,8 @@ public class DeviceListActivity extends Activity {
 
         setTitle(R.string.search_message);
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-
+        if (mBtAdapter.isDiscovering()) mBtAdapter.cancelDiscovery();
+        mBtAdapter.startDiscovery();
     }
 
     private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
@@ -125,6 +126,7 @@ public class DeviceListActivity extends Activity {
                 CharSequence address = info.toString().substring(info.length() - 17);
                 Intent intent = new Intent(DeviceListActivity.this, Work.class);
                 intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+
                 setResult(Activity.RESULT_OK, intent);
                 startActivityForResult(intent, Work.REQUEST_CONNECT_DEVICE);
                 finish();
@@ -145,8 +147,7 @@ public class DeviceListActivity extends Activity {
                         newDevicesListView.setEnabled(true);
                         mNewDevicesSet.add(address);
                         String name = device.getName();
-                        if ((name == null) || name.isEmpty())
-                            name = getString(R.string.empty_device_name);
+                        if ((name == null) || name.isEmpty()) name = getString(R.string.empty_device_name);
                         mNewDevicesArrayAdapter.add(name + '\n' + device.getAddress());
                     }
                 } else {
@@ -160,7 +161,11 @@ public class DeviceListActivity extends Activity {
                     newDevicesListView.setEnabled(false);
                 }
                 scanButton.setEnabled(true);
+
             }
+
+
+
         }
     };
 }
