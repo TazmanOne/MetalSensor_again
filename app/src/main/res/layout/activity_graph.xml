@@ -47,4 +47,13 @@
         android:layout_above="@+id/line_chart"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3" />
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:id="@+id/test"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/line_chart"
+        android:layout_alignEnd="@+id/line_chart" />
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package ru.ipmavlutov.metalsensor.Activities;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -21,7 +22,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,10 +54,28 @@ public class GraphActivity extends AppCompatActivity
     private double[] super_signal;
     private int size;
     private double[] signalArr;
-    private String startDateQueryDate = null;
-    private String endDateQueryDate = null;
+
+    public String getStartDateQueryDate() {
+        return startDateQueryDate;
+    }
+
+    public void setStartDateQueryDate(String startDateQueryDate) {
+        this.startDateQueryDate = startDateQueryDate;
+    }
+
+    public String getEndDateQueryDate() {
+        return endDateQueryDate;
+    }
+
+    public void setEndDateQueryDate(String endDateQueryDate) {
+        this.endDateQueryDate = endDateQueryDate;
+    }
+
+    private String startDateQueryDate;
+    private String endDateQueryDate;
     private MyThread MT;
     private double[] super_signalArr;
+    private Button btn_test;
 
 
     @Override
@@ -75,6 +93,8 @@ public class GraphActivity extends AppCompatActivity
         fragment2 = DatePickerFragment.newInstance(this);
         btn_dateDialog.setOnClickListener(lister);
         MT = new MyThread();
+        btn_test=(Button)findViewById(R.id.test);
+        btn_test.setOnClickListener(lister);
 
 
     }
@@ -87,8 +107,10 @@ public class GraphActivity extends AppCompatActivity
         this.super_signal = super_signal;
         this.size = size;
 
-        ArrayList<String> dateVals = new ArrayList<>();
-        dateVals.addAll(Arrays.asList(dateArr).subList(0, size));
+        ArrayList<String> dateVals = new ArrayList<String>();
+        for (int i = 0; i < size; i++) {
+            dateVals.add(dateArr[i]);
+        }
 
         ArrayList<Entry> signalVals = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -169,8 +191,7 @@ public class GraphActivity extends AppCompatActivity
         public void run() {
 
             SQLiteDatabase db = dbHelper.getReadableDatabase();
-            Cursor c = db.query("Statistic", null, "date" + " BETWEEN ? AND ?", new String[]{
-                    startDateQueryDate + " 00:00:00", endDateQueryDate + " 23:59:59"}, null, null, null, null);
+           Cursor c = db.rawQuery("SELECT * FROM Statistic WHERE date >= Datetime('"+getStartDateQueryDate()+" 00:00:00') AND date <= Datetime('"+getEndDateQueryDate()+" 23:59:59')",null);
             Log.d("TAG", "CURSOR SQL");
             if (c.moveToFirst()) {
                 // определяем номера столбцов по имени в выборке
@@ -232,6 +253,21 @@ public class GraphActivity extends AppCompatActivity
                     fragment2.show(getSupportFragmentManager(), "DatePicker2");
                     fragment.show(getSupportFragmentManager(), "DatePicker");
                     break;
+                case R.id.test:
+                    DBHelper db = new DBHelper(GraphActivity.this);
+                    SQLiteDatabase sqbd =db.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    for (int i=1;i<10;i++){
+                        cv.put("date", "2016-01-0"+i+" 0"+i+":0"+i);
+                        cv.put("temperature", 20+i%2);
+                        cv.put("signal", 13.37);
+                        cv.put("super_signal",1488.0);
+
+                        long rowID = sqbd.insert("Statistic", null, cv);
+                        Log.d("TEST SQL DATA", "row inserted, ID = " + rowID + " " + cv);
+                    }
+                    db.close();
+                    break;
                 default:
                     break;
             }
@@ -240,7 +276,7 @@ public class GraphActivity extends AppCompatActivity
 
     @Override
     public void DataSet(Date date, String tag) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (tag.equals(fragment.getTag())) {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
@@ -249,7 +285,7 @@ public class GraphActivity extends AppCompatActivity
             setYear(c.get(Calendar.YEAR));
             label_date.setText(String.format("С: %d/%d/%d",
                     day, month, year));
-            startDateQueryDate = sdf.format(date);
+            setStartDateQueryDate(sdf.format(date));
             Toast.makeText(GraphActivity.this,
                     "Первая дата С: " + day + "/" + month + "/" + year,
                     Toast.LENGTH_SHORT).show();
@@ -261,7 +297,7 @@ public class GraphActivity extends AppCompatActivity
             setDay2(c.get(Calendar.DAY_OF_MONTH));
             setMonth2(c.get(Calendar.MONTH));
             setYear2(c.get(Calendar.YEAR));
-            endDateQueryDate = sdf.format(date);
+            setEndDateQueryDate(sdf.format(date));
             label_date2.setText(String.format("По: %d/%d/%d",
                     day2, month2, year2));
             Toast.makeText(GraphActivity.this,

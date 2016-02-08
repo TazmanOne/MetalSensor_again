@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table Statistic ("
                 + "id integer primary key autoincrement,"
-                + "date numeric,"
+                + "date string,"
                 + "temperature real,"
                 + "signal real,"
                 + "super_signal real);");

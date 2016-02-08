@@ -22,7 +22,7 @@ public class MyTimerTask extends TimerTask {
         Log.d(LOG_TAG, "--- Insert in my_table: ---");
         // подготовим данные для вставки в виде пар: наименование столбца - значение
         ContentValues cv = new ContentValues();
-        cv.put("date", new SimpleDateFormat("dd:MM:yyyy HH:mm").format(Calendar.getInstance().getTime()));
+        cv.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()));
         cv.put("temperature", Work.temperature);
         cv.put("signal", Work.signal);
         cv.put("super_signal", Work.super_signal);
