@@ -1,6 +1,7 @@
 package ru.ipmavlutov.metalsensor;
 
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
@@ -37,6 +38,7 @@ public class BluetoothResponseHandler extends Handler {
         MSG_CONNECTING = activity.MSG_CONNECTING;
         Z = Work.Z;
         first_start = true;
+
     }
 
     public void setTarget(Work target) {
@@ -70,6 +72,11 @@ public class BluetoothResponseHandler extends Handler {
                     activity.setDeviceName((String) msg.obj);
                     break;
                 case MESSAGE_TOAST:
+                    Intent action_disconnected = new Intent(activity,WidgetInfo.class);
+                    action_disconnected.setAction(WidgetInfo.ACTION_STATE_NONE);
+                    action_disconnected.putExtra("disconnected",true);
+                    activity.sendBroadcast(action_disconnected);
+
                     Toast.makeText(activity.getBaseContext(), "Устройство " + msg.obj + " отключено", Toast.LENGTH_LONG).show();
                     activity.myTimer_off();
                     activity.finish();
@@ -104,6 +111,14 @@ public class BluetoothResponseHandler extends Handler {
 
                         activity.myTimer(first_start);
                         first_start = false;
+
+                        Intent action = new Intent(activity,WidgetInfo.class);
+                        action.setAction(WidgetInfo.ACTION_WIDGET_RECEIVER);
+                        action.putExtra("signal_value",signal_result);
+                        //PendingIntent actionPendingIntent = PendingIntent.getBroadcast(activity, 0, action, 0);
+                        activity.sendBroadcast(action);
+
+
                     }
 
             }
