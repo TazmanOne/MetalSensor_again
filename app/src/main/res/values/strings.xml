@@ -37,4 +37,7 @@
     <string name="date_picker">Выбор даты</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="graph_label_button">График</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="status">imageStatus</string>
 </resources>

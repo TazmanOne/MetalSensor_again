@@ -290,7 +290,7 @@ public class Work extends AppCompatActivity
 
     public void myTimer(boolean first_start) {
         if (first_start)
-            my_tm.schedule(my_tt, 5000, (5 * 60 * 1000));
+            my_tm.schedule(my_tt, 5000, (15 * 60 * 1000));
     }
 
     public void myTimer_off() {

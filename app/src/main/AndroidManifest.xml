@@ -30,6 +30,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.GraphActivity" />
+
+        <receiver android:name=".WidgetInfo">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ru.example.android.widget.ACTION_WIDGET_RECEIVER" />
+                <action android:name="ru.example.android.widget.ACTION_STATE_NONE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_info" />
+        </receiver>
     </application>
 
 </manifest>
