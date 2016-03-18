@@ -31,7 +31,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.GraphActivity" />
 
-        <receiver android:name=".WidgetInfo">
+        <receiver android:name=".WidgetInfo"
+            android:label="@string/widget_label"
+            android:icon="@drawable/logo_black_on_white">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="ru.example.android.widget.ACTION_WIDGET_RECEIVER" />

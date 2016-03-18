@@ -294,6 +294,7 @@ public class GraphActivity extends AppCompatActivity
         if (tag.equals(fragment2.getTag())) {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
+
             setDay2(c.get(Calendar.DAY_OF_MONTH));
             setMonth2(c.get(Calendar.MONTH));
             setYear2(c.get(Calendar.YEAR));

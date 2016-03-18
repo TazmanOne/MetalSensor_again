@@ -13,101 +13,13 @@
     tools:showIn="@layout/app_bar_work">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="91dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/temperature_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-
-            android:text="@string/temperature_text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
-        <TextView
-            android:id="@+id/temperature_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/temperature_label"
-            android:layout_alignLeft="@+id/temperature_label"
-            android:layout_alignRight="@+id/temperature_label"
-            android:layout_alignStart="@+id/temperature_label"
-            android:layout_below="@+id/temperature_label"
-            android:layout_marginTop="37dp"
-            android:gravity="center_horizontal"
-            android:text="@string/temperature_value"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout_Absolute"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
-
-        <TextView
-            android:id="@+id/signal_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/signal_text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/signal_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signal_label"
-            android:layout_alignLeft="@+id/signal_label"
-            android:layout_alignRight="@+id/signal_label"
-            android:layout_alignStart="@+id/signal_label"
-            android:layout_below="@+id/signal_label"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:text="@string/signal_value"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        <TextView
-            android:id="@+id/super_signal_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-
-            android:layout_marginTop="54dp"
-            android:text="@string/super_signal_text"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/super_signal_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/super_signal_value"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:visibility="gone" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/relativeLayout3">
+        android:layout_alignParentStart="true">
 
 
 
@@ -178,6 +90,196 @@
             android:layout_alignEnd="@+id/current_value_label"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RL_First_Sensor">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_Temp_1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout_Signal_1"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/temperature_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+
+                android:text="@string/temperature_text1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+            <TextView
+                android:id="@+id/temperature_value_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/temperature_label_1"
+                android:layout_alignLeft="@+id/temperature_label_1"
+                android:layout_alignRight="@+id/temperature_label_1"
+                android:layout_alignStart="@+id/temperature_label_1"
+                android:layout_below="@+id/temperature_label_1"
+                android:layout_marginTop="37dp"
+                android:gravity="center_horizontal"
+                android:text="@string/temperature_value1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_Signal_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/signal_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/signal_text1"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/signal_value_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signal_label_1"
+                android:layout_alignLeft="@+id/signal_label_1"
+                android:layout_alignRight="@+id/signal_label_1"
+                android:layout_alignStart="@+id/signal_label_1"
+                android:layout_below="@+id/signal_label_1"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:text="@string/signal_value1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TextView
+                android:id="@+id/super_signal_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                android:layout_marginTop="54dp"
+                android:text="@string/super_signal_text1"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/super_signal_value_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/super_signal_value1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RL_First_Sensor"
+        android:layout_alignParentBottom="false"
+        android:id="@+id/RL_Second_Sensor">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_Signal_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" >
+
+            <TextView
+                android:id="@+id/signal_label_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/signal_text2"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/signal_value_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/signal_label_2"
+                android:layout_alignLeft="@+id/signal_label_2"
+                android:layout_alignRight="@+id/signal_label_2"
+                android:layout_alignStart="@+id/signal_label_2"
+                android:layout_below="@+id/signal_label_2"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal"
+                android:text="@string/signal_value2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="54dp"
+                android:text="@string/super_signal_text1"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/super_signal_value1"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout_Temp_2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout_Signal_2"
+            android:layout_gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/temperature_label_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/temperature_text2"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/temperature_value_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/temperature_label_2"
+                android:layout_alignLeft="@+id/temperature_label_2"
+                android:layout_alignRight="@+id/temperature_label_2"
+                android:layout_alignStart="@+id/temperature_label_2"
+                android:layout_below="@+id/temperature_label_2"
+                android:layout_marginTop="37dp"
+                android:gravity="center_horizontal"
+                android:text="@string/temperature_value2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

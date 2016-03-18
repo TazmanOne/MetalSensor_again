@@ -23,7 +23,7 @@ public class WidgetInfo extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_info);
         final String action = intent.getAction();
         if (ACTION_WIDGET_RECEIVER.equals(action)) {
-            double msg = intent.getDoubleExtra("signal_value", 0.0);
+            double msg = intent.getDoubleExtra("signal_value1", 0.0);
             try {
                 if ((msg == 0.0)) {
                     views.setImageViewResource(R.id.imageView2, R.drawable.black_monitor);
