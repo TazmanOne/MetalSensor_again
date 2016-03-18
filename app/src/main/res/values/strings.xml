@@ -31,9 +31,9 @@
     <!--
     First Sensor
     -->
-    <string name="temperature_text1">Температура №1</string>
+    <string name="temperature_text1">Температура</string>
     <string name="temperature_value1" />
-    <string name="signal_text1">Частицы износа №1</string>
+    <string name="signal_text1">Частицы износа</string>
     <string name="signal_value1" />
     <string name="super_signal_text1">Усиленный сигнал №1</string>
     <string name="super_signal_value1"> </string>

@@ -73,9 +73,9 @@ public class BluetoothResponseHandler extends Handler {
                     activity.setDeviceName((String) msg.obj);
                     break;
                 case MESSAGE_TOAST:
-                    Intent action_disconnected = new Intent(activity,WidgetInfo.class);
+                    Intent action_disconnected = new Intent(activity, WidgetInfo.class);
                     action_disconnected.setAction(WidgetInfo.ACTION_STATE_NONE);
-                    action_disconnected.putExtra("disconnected",true);
+                    action_disconnected.putExtra("disconnected", true);
                     activity.sendBroadcast(action_disconnected);
 
                     Toast.makeText(activity.getBaseContext(), "Устройство " + msg.obj + " отключено", Toast.LENGTH_LONG).show();
@@ -97,9 +97,13 @@ public class BluetoothResponseHandler extends Handler {
                         //FF=[6,7],/r/n=[8,9]
 
                         //температура датчика #1
-                        int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
                         TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
-                        temperature_value_1.setText(String.format("%s  °C", String.valueOf(temperature_result_1)));
+                        String str = String.valueOf(GetTemperature(temperature_1));
+                        temperature_value_1.setText(String.format("%s  °C", str));
+                        int temperature_result_1 = Integer.parseInt(str);
+
+                        //int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
+
 
                         //значение сигнала #1
 
@@ -109,18 +113,18 @@ public class BluetoothResponseHandler extends Handler {
                         signal_value_1.setText(String.format("%s мг", str_signal_1));
 
 
-                        double signal_result_1=Double.parseDouble(str_signal_1.replace(",",".") );
+                        double signal_result_1 = Double.parseDouble(str_signal_1.replace(",", "."));
 
                         //температура датчика #2
-                        int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
-                        TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
-                        temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
+                        //int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
+                        // TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
+                        // temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
 
                         //значение сигнала #2
                         //double signal_result_2 = FindRudeSignal(Correction(GetSignal(signal_2), temperature_result_2), Z);
-                        TextView signal_value_2 = (TextView) activity.findViewById(R.id.signal_value_2);
-                        String str_signal_2 = new String(signal_2, Charset.forName("UTF-8"));
-                        signal_value_2.setText(String.format("%s мг", str_signal_2));
+                       // TextView signal_value_2 = (TextView) activity.findViewById(R.id.signal_value_2);
+                       // String str_signal_2 = new String(signal_2, Charset.forName("UTF-8"));
+                       // signal_value_2.setText(String.format("%s мг", str_signal_2));
 
 
                         //значение супер сигнала
@@ -135,9 +139,9 @@ public class BluetoothResponseHandler extends Handler {
                         activity.myTimer(first_start);
                         first_start = false;
 
-                        Intent action = new Intent(activity,WidgetInfo.class);
+                        Intent action = new Intent(activity, WidgetInfo.class);
                         action.setAction(WidgetInfo.ACTION_WIDGET_RECEIVER);
-                        action.putExtra("signal_value1",signal_result_1);
+                        action.putExtra("signal_value1", signal_result_1);
                         //PendingIntent actionPendingIntent = PendingIntent.getBroadcast(activity, 0, action, 0);
                         activity.sendBroadcast(action);
 
