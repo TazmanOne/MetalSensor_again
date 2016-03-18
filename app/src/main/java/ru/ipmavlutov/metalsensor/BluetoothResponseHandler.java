@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import ru.ipmavlutov.metalsensor.Activities.Work;
@@ -86,35 +87,57 @@ public class BluetoothResponseHandler extends Handler {
                 case MESSAGE_DATA:
                     byte[] a = (byte[]) msg.obj;
                     //activity.UpDateResult(a);
-                    if (a.length == 9) {
-                        byte[] temperature = Arrays.copyOfRange(a, 0, 2);//[0,1]
-                        byte[] signal = Arrays.copyOfRange(a, 2, 4);//[2,3]
-                        byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
+                    if (a.length == 19) {
+                        byte[] temperature_1 = Arrays.copyOfRange(a, 0, 2);//[0,1]
+                        byte[] signal_1 = Arrays.copyOfRange(a, 2, 7);//[2,6]
+                        byte[] temperature_2 = Arrays.copyOfRange(a, 7, 9);//[7,8]
+                        byte[] signal_2 = Arrays.copyOfRange(a, 9, 14);//[9,13]
+
+                        //byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
                         //FF=[6,7],/r/n=[8,9]
 
-                        //температура датчика
-                        int temperature_result = FindTemperature(GetTemperature(temperature));
-                        TextView temperature_value = (TextView) activity.findViewById(R.id.temperature_value);
-                        temperature_value.setText(String.format("%s  °C", String.valueOf(temperature_result)));
+                        //температура датчика #1
+                        int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
+                        TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
+                        temperature_value_1.setText(String.format("%s  °C", String.valueOf(temperature_result_1)));
 
-                        //значение сигнала
-                        double signal_result = FindRudeSignal(Correction(GetSignal(signal), temperature_result), Z);
-                        TextView signal_value = (TextView) activity.findViewById(R.id.signal_value);
-                        signal_value.setText(String.format("%s мг", Double.toString(signal_result)));
+                        //значение сигнала #1
+
+
+                        TextView signal_value_1 = (TextView) activity.findViewById(R.id.signal_value_1);
+                        String str_signal_1 = new String(signal_1, Charset.forName("UTF-8"));
+                        signal_value_1.setText(String.format("%s мг", str_signal_1));
+
+
+                        double signal_result_1=Double.parseDouble(str_signal_1.replace(",",".") );
+
+                        //температура датчика #2
+                        int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
+                        TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
+                        temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
+
+                        //значение сигнала #2
+                        //double signal_result_2 = FindRudeSignal(Correction(GetSignal(signal_2), temperature_result_2), Z);
+                        TextView signal_value_2 = (TextView) activity.findViewById(R.id.signal_value_2);
+                        String str_signal_2 = new String(signal_2, Charset.forName("UTF-8"));
+                        signal_value_2.setText(String.format("%s мг", str_signal_2));
+
 
                         //значение супер сигнала
-                        double super_signal_result = FindSuperSignal(Correction(GetSuperSignal(super_signal), temperature_result), Z);
+                        /*double super_signal_result = FindSuperSignal(Correction(GetSuperSignal(super_signal), temperature_result_1), Z);
                         TextView super_signal_value = (TextView) activity.findViewById(R.id.super_signal_value);
-                        super_signal_value.setText(String.format("%s мг", Double.toString(super_signal_result)));
+                        super_signal_value.setText(String.format("%s мг", Double.toString(super_signal_result)));*/
 
-                        activity.UpDateBD(temperature_result, signal_result, super_signal_result);
+                        //на время super_signal_result = 0
+                        double super_signal_result = 0;
+                        activity.UpDateBD(temperature_result_1, signal_result_1, super_signal_result);
 
                         activity.myTimer(first_start);
                         first_start = false;
 
                         Intent action = new Intent(activity,WidgetInfo.class);
                         action.setAction(WidgetInfo.ACTION_WIDGET_RECEIVER);
-                        action.putExtra("signal_value",signal_result);
+                        action.putExtra("signal_value1",signal_result_1);
                         //PendingIntent actionPendingIntent = PendingIntent.getBroadcast(activity, 0, action, 0);
                         activity.sendBroadcast(action);
 

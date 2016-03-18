@@ -55,5 +55,6 @@
         android:id="@+id/test"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/line_chart"
-        android:layout_alignEnd="@+id/line_chart" />
+        android:layout_alignEnd="@+id/line_chart"
+        android:visibility="gone" />
 </RelativeLayout>
