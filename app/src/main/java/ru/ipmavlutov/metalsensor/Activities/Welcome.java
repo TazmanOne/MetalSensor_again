@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ru.ipmavlutov.metalsensor.DeviceConnector;
 import ru.ipmavlutov.metalsensor.DeviceListActivity;
@@ -80,13 +81,18 @@ public class Welcome extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            if (btAdapter.isEnabled()) {
-                Intent serverIntent = new Intent(getBaseContext(), DeviceListActivity.class);
-                startActivity(serverIntent);
-                // startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-            } else {
-                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivity(enableIntent);
+            try{
+                if (btAdapter.isEnabled()) {
+                    Intent serverIntent = new Intent(getBaseContext(), DeviceListActivity.class);
+                    startActivity(serverIntent);
+                    // startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+                } else {
+                    Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivity(enableIntent);
+                }
+
+            }catch (Exception ex){
+                Toast.makeText(Welcome.this, "Устройство не поддреживает Bluetooth", Toast.LENGTH_SHORT).show();
             }
         }
     };

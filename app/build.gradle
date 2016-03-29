@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'boyklan4500'
             keyPassword 'boyklan4500'
-            storeFile file('C:/Users/user/AndroidStudioProjects/debug.jks')
+            storeFile file('/home/tazman/AndroidStudioProjects/debug.jks')
             storePassword 'boyklan4500'
         }
     }
