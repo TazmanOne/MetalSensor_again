@@ -2,12 +2,18 @@ package ru.ipmavlutov.metalsensor;
 
 
 import android.content.Intent;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -87,68 +93,111 @@ public class BluetoothResponseHandler extends Handler {
                 case MESSAGE_DATA:
                     byte[] a = (byte[]) msg.obj;
                     //activity.UpDateResult(a);
-                    if (a.length == 19) {
-                        byte[] temperature_1 = Arrays.copyOfRange(a, 0, 2);//[0,1]
-                        byte[] signal_1 = Arrays.copyOfRange(a, 2, 7);//[2,6]
-                        byte[] temperature_2 = Arrays.copyOfRange(a, 7, 9);//[7,8]
-                        byte[] signal_2 = Arrays.copyOfRange(a, 9, 14);//[9,13]
+                    if (a.length == 26) {
+                        try {
+                            byte[] temperature_1 = Arrays.copyOfRange(a, 0, 2);//[0,1]
+                            byte[] signal_1 = Arrays.copyOfRange(a, 2, 7);//[2,6]
+                            byte[] temperature_2 = Arrays.copyOfRange(a, 7, 9);//[7,8]
+                            byte[] signal_2 = Arrays.copyOfRange(a, 9, 14);//[9,13]
+                            byte[] signal_3 = Arrays.copyOfRange(a, 14, 19);
+                            byte[] temperature_3 = Arrays.copyOfRange(a, 19, 21);
 
-                        //byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
-                        //FF=[6,7],/r/n=[8,9]
+                            //byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
+                            //FF=[6,7],/r/n=[8,9]
 
-                        //температура датчика #1
-                        TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
-                        String str = String.valueOf(GetTemperature(temperature_1));
-                        temperature_value_1.setText(String.format("%s  °C", str));
-                        int temperature_result_1 = Integer.parseInt(str);
+                            //температура датчика #1
+                            int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
+                            TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
+                            temperature_value_1.setText(String.format("%s  °C", String.valueOf(temperature_result_1)));
 
-                        //int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
+                            //значение сигнала #1
+                            TextView signal_value_1 = (TextView) activity.findViewById(R.id.signal_value_1);
+                            String str_signal_1 = new String(signal_1, Charset.forName("UTF-8"));
+                            signal_value_1.setText(String.format("%s мг", str_signal_1));
+
+                            //для БД
+                            double signal_result_1 = Double.parseDouble(str_signal_1.replace(",", "."));
+
+                            //температура датчика #2
+                            int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
+                            TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
+                            temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
+
+                            //значение сигнала #2
+                            //double signal_result_2 = FindRudeSignal(Correction(GetSignal(signal_2), temperature_result_2), Z);
+                            TextView signal_value_2 = (TextView) activity.findViewById(R.id.signal_value_2);
+                            String str_signal_2 = new String(signal_2, Charset.forName("UTF-8"));
+                            signal_value_2.setText(String.format("%s мг", str_signal_2));
+
+                            //температура датчика #3
+                            int temperature_result_3 = FindTemperature(GetTemperature(temperature_3));
+                            TextView temperature_value_3 = (TextView) activity.findViewById(R.id.temperature_value_3);
+                            temperature_value_3.setText(String.format("%s  °C", String.valueOf(temperature_result_3)));
+
+                            //значение сигнала #3
+                            TextView signal_value_3 = (TextView) activity.findViewById(R.id.signal_value_3);
+                            String str_signal_3 = new String(signal_3, Charset.forName("UTF-8"));
+                            signal_value_3.setText(String.format("%s мг", str_signal_3));
 
 
-                        //значение сигнала #1
-
-
-                        TextView signal_value_1 = (TextView) activity.findViewById(R.id.signal_value_1);
-                        String str_signal_1 = new String(signal_1, Charset.forName("UTF-8"));
-                        signal_value_1.setText(String.format("%s мг", str_signal_1));
-
-
-                        double signal_result_1 = Double.parseDouble(str_signal_1.replace(",", "."));
-
-                        //температура датчика #2
-                        //int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
-                        // TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
-                        // temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
-
-                        //значение сигнала #2
-                        //double signal_result_2 = FindRudeSignal(Correction(GetSignal(signal_2), temperature_result_2), Z);
-                       // TextView signal_value_2 = (TextView) activity.findViewById(R.id.signal_value_2);
-                       // String str_signal_2 = new String(signal_2, Charset.forName("UTF-8"));
-                       // signal_value_2.setText(String.format("%s мг", str_signal_2));
-
-
-                        //значение супер сигнала
+                            //значение супер сигнала
                         /*double super_signal_result = FindSuperSignal(Correction(GetSuperSignal(super_signal), temperature_result_1), Z);
                         TextView super_signal_value = (TextView) activity.findViewById(R.id.super_signal_value);
                         super_signal_value.setText(String.format("%s мг", Double.toString(super_signal_result)));*/
 
-                        //на время super_signal_result = 0
-                        double super_signal_result = 0;
-                        activity.UpDateBD(temperature_result_1, signal_result_1, super_signal_result);
+                            //на время super_signal_result = 0
+                            double super_signal_result = 0;
+                            activity.UpDateBD(temperature_result_1, signal_result_1, super_signal_result);
 
-                        activity.myTimer(first_start);
-                        first_start = false;
+                            activity.myTimer(first_start);
+                            first_start = false;
 
-                        Intent action = new Intent(activity, WidgetInfo.class);
-                        action.setAction(WidgetInfo.ACTION_WIDGET_RECEIVER);
-                        action.putExtra("signal_value1", signal_result_1);
-                        //PendingIntent actionPendingIntent = PendingIntent.getBroadcast(activity, 0, action, 0);
-                        activity.sendBroadcast(action);
+                            Intent action = new Intent(activity, WidgetInfo.class);
+                            action.setAction(WidgetInfo.ACTION_WIDGET_RECEIVER);
+                            action.putExtra("signal_value1", signal_result_1);
+                            //PendingIntent actionPendingIntent = PendingIntent.getBroadcast(activity, 0, action, 0);
+                            activity.sendBroadcast(action);
+                        } catch (Exception ex) {
+                            appendLog(ex.toString());
+                            int i=0;
+                            Log.d("CATCHE:",""+i);
+                            i++;
+                        }
+
 
 
                     }
 
             }
+        }
+    }
+    public void appendLog(String text)
+    {
+        File logFile = new File(Environment.getExternalStorageDirectory(),"log.txt");
+        if (!logFile.exists())
+        {
+            try
+            {
+                logFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
