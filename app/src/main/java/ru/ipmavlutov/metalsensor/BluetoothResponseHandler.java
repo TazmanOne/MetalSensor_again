@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,10 +14,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -93,20 +88,21 @@ public class BluetoothResponseHandler extends Handler {
                 case MESSAGE_DATA:
                     byte[] a = (byte[]) msg.obj;
                     //activity.UpDateResult(a);
-                    if (a.length == 26) {
+                    if (a.length == 26) {//26
                         try {
                             byte[] temperature_1 = Arrays.copyOfRange(a, 0, 2);//[0,1]
                             byte[] signal_1 = Arrays.copyOfRange(a, 2, 7);//[2,6]
                             byte[] temperature_2 = Arrays.copyOfRange(a, 7, 9);//[7,8]
                             byte[] signal_2 = Arrays.copyOfRange(a, 9, 14);//[9,13]
-                            byte[] signal_3 = Arrays.copyOfRange(a, 14, 19);
-                            byte[] temperature_3 = Arrays.copyOfRange(a, 19, 21);
+                            byte[] temperature_3 = Arrays.copyOfRange(a, 14, 16);
+                            byte[] signal_3 = Arrays.copyOfRange(a, 16, 21);
+
 
                             //byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
                             //FF=[6,7],/r/n=[8,9]
 
                             //температура датчика #1
-                            int temperature_result_1 = FindTemperature(GetTemperature(temperature_1));
+                            int temperature_result_1 = Integer.parseInt(new String(temperature_1,"UTF-8"));
                             TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
                             temperature_value_1.setText(String.format("%s  °C", String.valueOf(temperature_result_1)));
 
@@ -119,7 +115,7 @@ public class BluetoothResponseHandler extends Handler {
                             double signal_result_1 = Double.parseDouble(str_signal_1.replace(",", "."));
 
                             //температура датчика #2
-                            int temperature_result_2 = FindTemperature(GetTemperature(temperature_2));
+                            int temperature_result_2 = Integer.parseInt(new String(temperature_2,"UTF-8"));
                             TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
                             temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
 
@@ -130,7 +126,7 @@ public class BluetoothResponseHandler extends Handler {
                             signal_value_2.setText(String.format("%s мг", str_signal_2));
 
                             //температура датчика #3
-                            int temperature_result_3 = FindTemperature(GetTemperature(temperature_3));
+                            int temperature_result_3 = Integer.parseInt(new String(temperature_3,"UTF-8"));
                             TextView temperature_value_3 = (TextView) activity.findViewById(R.id.temperature_value_3);
                             temperature_value_3.setText(String.format("%s  °C", String.valueOf(temperature_result_3)));
 
@@ -159,11 +155,7 @@ public class BluetoothResponseHandler extends Handler {
                             activity.sendBroadcast(action);
                         } catch (Exception ex) {
                             appendLog(ex.toString());
-                            int i=0;
-                            Log.d("CATCHE:",""+i);
-                            i++;
                         }
-
 
 
                     }
@@ -171,171 +163,27 @@ public class BluetoothResponseHandler extends Handler {
             }
         }
     }
-    public void appendLog(String text)
-    {
-        File logFile = new File(Environment.getExternalStorageDirectory(),"log.txt");
-        if (!logFile.exists())
-        {
-            try
-            {
+
+    public void appendLog(String text) {
+        File logFile = new File(Environment.getExternalStorageDirectory(), "log.txt");
+        if (!logFile.exists()) {
+            try {
                 logFile.createNewFile();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        try
-        {
+        try {
             //BufferedWriter for performance, true to set append to file flag
             BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
             buf.append(text);
             buf.newLine();
             buf.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    private short GetTemperature(byte[] temperature_array) {
-        short temperature;
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        bb.put(temperature_array[0]);
-        bb.put(temperature_array[1]);
-        temperature = bb.getShort(0);
-        return temperature;
-    }
-
-    private double GetSuperSignal(byte[] super_signal_array) {
-        double super_signal;
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        bb.put(super_signal_array[0]);
-        bb.put(super_signal_array[1]);
-        super_signal = bb.getShort(0);
-        return super_signal;
-    }
-
-    private double GetSignal(byte[] signal_array) {
-        double signal;
-        ByteBuffer bb = ByteBuffer.allocate(2);
-        bb.order(ByteOrder.BIG_ENDIAN);
-        bb.put(signal_array[0]);
-        bb.put(signal_array[1]);
-        signal = bb.getShort(0);
-        return signal;
-    }
-
-    private int temperature_code[] =
-            {
-                    0x01F7, 0x01F6, 0x01F5, 0x01F4, 0x01F3, 0x01F2, 0x01F1, 0x01F0, 0x01EF, 0x01EE,
-                    0x01ED, 0x01EC, 0x01EA, 0x01E9, 0x01E8, 0x01E6, 0x01E5, 0x01E3, 0x01E2, 0x01E0,
-                    0x01DE, 0x01DC, 0x01DB, 0x01D9, 0x01D6, 0x01D4, 0x01D2, 0x01D0, 0x01CD, 0x01CA,
-                    0x01C7, 0x01C5, 0x01C2, 0x01BF, 0x01BC, 0x00B9, 0x01B6, 0x01B3, 0x01AF, 0x01AB,
-                    0x01A7, 0x01A4, 0x01A0, 0x019C, 0x0198, 0x0193, 0x0190, 0x018B, 0x0187, 0x0182,
-                    0x017D, 0x0179, 0x0174, 0x0170, 0x016A, 0x0165, 0x0160, 0x015B, 0x0156, 0x0151,
-                    0x014B, 0x0146, 0x0141, 0x013C, 0x0136, 0x0130, 0x012B, 0x0126, 0x0121, 0x011B,
-                    0x0115, 0x0110, 0x010B, 0x0106, 0x0100, 0x00FA, 0x00F6, 0x00F1, 0x00EB, 0x00E6,
-                    0x00E0, 0x00DC, 0x00D7, 0x00D2, 0x00CD, 0x00C8, 0x00C3, 0x00BF, 0x00BA, 0x00B6,
-                    0x00B1, 0x00AD, 0x00A9, 0x00A4, 0x00A0, 0x009C, 0x0098, 0x0094, 0x0091, 0x008D,
-                    0x0089, 0x0085, 0x0082, 0x007F, 0x007B, 0x0078, 0x0075, 0x0072, 0x006F, 0x006C,
-                    0x0068, 0x0066, 0x0063, 0x0060, 0x005E, 0x005B, 0x0059, 0x0057, 0x0054, 0x0052,
-                    0x004F, 0x004D, 0x004B, 0x0049, 0x0047, 0x0045, 0x0043, 0x0042, 0x0040, 0x003E,
-                    0x003C, 0x003B, 0x0039, 0x0038, 0x0036, 0x0035, 0x0033, 0x0032, 0x0031, 0x002F,
-                    0x002E
-            };
-
-
-    public int FindTemperature(int thermo) {
-        int index;
-        int temperature;
-
-
-        if (thermo >= 0x01F8) {
-            return 127;
-        } else if (thermo >= 0x01A8) {
-            index = 40;
-        } else if (thermo >= 0x0116) {
-            index = 70;
-        } else if (thermo >= 0x008A) {
-            index = 100;
-        } else if (thermo >= 0x002E) {
-            index = 140;
-        } else {
-            return (thermo + 54);
-        }
-        while ((temperature_code[index--]) < thermo) ;
-        temperature = ((index) - 39);
-        return temperature;
-    }
-
-    public double FindRudeSignal(double P, double Z) {
-        double m;
-        double dp;
-        double result;
-        dp = P - Z;//104
-        if (dp < 3) {
-            m = 0;
-        } else {
-            if (dp < 9) {//8
-                m = 0.075 * dp;
-
-            } else {
-                if (dp < 27) {
-                    m = 0.0473 * dp + 0.2229;
-                } else {
-                    if (dp < 51) {
-                        m = 0.10416 * dp - 1.3121;
-                    } else {
-                        m = 0.375 * dp - 15.125;
-                    }
-                }
-            }
-        }
-
-        result = new BigDecimal(m).setScale(1, RoundingMode.UP).doubleValue();
-        return (result);
-    }
-
-    // final int SP0 = 533;
-    public double FindSuperSignal(double P, double Z) {
-        double m;
-        double dp;
-        double super_result;
-        dp = P - Z;
-        if (dp < 85) {
-            m = 0;
-        } else {
-            if (dp < 270) {
-                m = 0.00486 * dp + 0.187;
-            } else {
-                if (dp < 510) {
-                    m = 0.010476 * dp - 1.3123;
-                } else {
-                    m = 0.0375 * dp - 15.125;
-                }
-            }
-        }
-
-        super_result = new BigDecimal(m).setScale(1, RoundingMode.UP).doubleValue();
-        return (super_result);
-    }
-
-    public double Correction(double P, int temperature) {
-        double correct_signal;
-        double correction;
-        if (temperature < 76) {
-            correction = 0.45 * temperature - 11.25;
-        } else {
-            correction = 0.29 * temperature + 0.96;
-        }
-        correct_signal = P - correction;
-        return correct_signal;
     }
 }
 
