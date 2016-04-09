@@ -47,6 +47,15 @@
     <string name="super_signal_text2">Усиленный сигнал №2</string>
     <string name="super_signal_value2"> </string>
     <!--
+    Third Sensor
+    -->
+    <string name="temperature_text3">Температура №3</string>
+    <string name="temperature_value3" />
+    <string name="signal_text3">Частицы износа №3</string>
+    <string name="signal_value3" />
+    <string name="super_signal_text3">Усиленный сигнал №3</string>
+    <string name="super_signal_value3"> </string>
+    <!--
     Settings
     -->
     <string name="edit_text">По умолчанию=96.0</string>
