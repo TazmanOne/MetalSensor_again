@@ -297,7 +297,7 @@ public class DeviceConnector {
             if (D) Log.i(TAG, "ConnectedThread run");
 
 
-            byte[] buffer = new byte[4096];
+            byte[] buffer = new byte[32];
             String data = "";
             try {
                 //noinspection InfiniteLoopStatement
