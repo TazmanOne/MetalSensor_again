@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -88,7 +90,7 @@ public class BluetoothResponseHandler extends Handler {
                 case MESSAGE_DATA:
                     byte[] a = (byte[]) msg.obj;
                     //activity.UpDateResult(a);
-                    if (a.length == 26) {//26
+                    if (a.length == 3) {//26
                         try {
                             byte[] temperature_1 = Arrays.copyOfRange(a, 0, 2);//[0,1]
                             byte[] signal_1 = Arrays.copyOfRange(a, 2, 7);//[2,6]
@@ -97,14 +99,14 @@ public class BluetoothResponseHandler extends Handler {
                             byte[] temperature_3 = Arrays.copyOfRange(a, 14, 16);
                             byte[] signal_3 = Arrays.copyOfRange(a, 16, 21);
 
-
                             //byte[] super_signal = Arrays.copyOfRange(a, 4, 6);//[4,5]
                             //FF=[6,7],/r/n=[8,9]
 
                             //температура датчика #1
-                            int temperature_result_1 = Integer.parseInt(new String(temperature_1,"UTF-8"));
+                            int temperature_result_1 = getTemperature(temperature_1);
                             TextView temperature_value_1 = (TextView) activity.findViewById(R.id.temperature_value_1);
                             temperature_value_1.setText(String.format("%s  °C", String.valueOf(temperature_result_1)));
+
 
                             //значение сигнала #1
                             TextView signal_value_1 = (TextView) activity.findViewById(R.id.signal_value_1);
@@ -115,9 +117,10 @@ public class BluetoothResponseHandler extends Handler {
                             double signal_result_1 = Double.parseDouble(str_signal_1.replace(",", "."));
 
                             //температура датчика #2
-                            int temperature_result_2 = Integer.parseInt(new String(temperature_2,"UTF-8"));
+                            int temperature_result_2 = getTemperature(temperature_2);
                             TextView temperature_value_2 = (TextView) activity.findViewById(R.id.temperature_value_2);
                             temperature_value_2.setText(String.format("%s  °C", String.valueOf(temperature_result_2)));
+
 
                             //значение сигнала #2
                             //double signal_result_2 = FindRudeSignal(Correction(GetSignal(signal_2), temperature_result_2), Z);
@@ -126,9 +129,10 @@ public class BluetoothResponseHandler extends Handler {
                             signal_value_2.setText(String.format("%s мг", str_signal_2));
 
                             //температура датчика #3
-                            int temperature_result_3 = Integer.parseInt(new String(temperature_3,"UTF-8"));
+                            int temperature_result_3 = getTemperature(temperature_3);
                             TextView temperature_value_3 = (TextView) activity.findViewById(R.id.temperature_value_3);
                             temperature_value_3.setText(String.format("%s  °C", String.valueOf(temperature_result_3)));
+
 
                             //значение сигнала #3
                             TextView signal_value_3 = (TextView) activity.findViewById(R.id.signal_value_3);
@@ -184,6 +188,15 @@ public class BluetoothResponseHandler extends Handler {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    public short getTemperature(byte[] b) {
+        short temperature;
+        ByteBuffer bb = ByteBuffer.allocate(2);
+        bb.order(ByteOrder.BIG_ENDIAN);
+        bb.put(0, b[0]);
+        bb.put(1, b[1]);
+        temperature=bb.getShort(0);
+        return temperature;
     }
 }
 
